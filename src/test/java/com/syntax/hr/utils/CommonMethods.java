@@ -1,13 +1,17 @@
 package com.syntax.hr.utils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.cucumber.java.eo.Se;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -83,25 +87,52 @@ public class CommonMethods {
 	}
 
 	//please write the logic for a all methods below
-	
-	public static void switchToFrame(WebElement element) {
 
+	public static void switchToFrame(WebElement element) {
+		try {
+			driver.switchTo().frame(element);
+		} catch (NoSuchFrameException e){
+			e.printStackTrace();
+		}
 	}
 
 	public static void switchToFrame(int index) {
+		try {
+			driver.switchTo().frame(index);
+		} catch (NoSuchFrameException e){
+			e.printStackTrace();
+		}
 
 	}
 
 	public static void switchToFrame(String nameOrId) {
+		try {
+			driver.switchTo().frame(nameOrId);
+		} catch (NoSuchFrameException e){
+			e.printStackTrace();
+		}
 
 	}
 	
 	public static void selectDdValue(WebElement element, String textToSelect) {
-		
+
+		Select select = new Select(element);
+		List<WebElement> options = select.getOptions();
+		for (WebElement option : options){
+			if (option.getText().equals(textToSelect))
+			select.selectByVisibleText(textToSelect);
+			break;
+		}
+
 	}
 	
 	public static void selectDdValue(WebElement element, int index) {
-		
+		Select select = new Select(element);
+		int size = select.getOptions().size();
+		if (size > index) {
+			select.selectByIndex(index);
+		}
+
 	}
 	
 }
